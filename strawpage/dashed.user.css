@@ -1,0 +1,848 @@
+/* ==UserStyle==
+@name           Dashed - Straw.page Dashboard Theme
+@namespace      https://github.com/UnknownBreeze/userstyles
+@version        1.0.0
+@description    Customizable theme for straw.page dashboard.
+@author         Jare
+@license        MIT
+@preprocessor   stylus
+
+@var select  palette 'Palette' {
+    'Custom        *': 'Custom',
+    'Snow           ': 'Pl1',
+    'Apple          ': 'Pl2',
+    'Seafoam        ': 'Pl3',
+    'Aquamarine     ': 'Pl4',
+    'Cinereous      ': 'Pl5',
+    'Mulberry       ': 'Pl6',
+}
+@var color    _bgColor       "Custom background color" #63b8c5 
+@var color    _mainColor     "Custom primary color" #efa7a3
+@var color    _contColor     "Custom secondary color" #faede0
+@var color    _borderColor   "Custom border color" #4c3457
+@var color    _textColor     "Custom text color" #4c3457
+@var checkbox trf            '🟠🟠🟠 or 🔶🔶🔶' 1
+@var select  backgrounds 'Background pattern' {
+    'None             ': 'None',
+    'Gradient         ': 'Gradient',
+    'Diamonds        *': 'Diamonds',
+    'Checkerboard     ': 'Checker',
+    'Grid             ': 'Grid',
+    'Polka dots       ': 'Dots',
+    'Triangles        ': 'Tri',
+    'Diagonal stripes ': 'dStripes',
+}
+@var range    bgScl          "Background scale" [0, -35, 100, 1, 'px']
+@var range    bgHue          "Background accent color hue" [0, 0, 360, 1, 'deg']
+@var range    bgSat          "Background accent color saturation" [-1, -100, 100, 1, '%']
+@var range    bgBr           "Background accent color brightness" [10, -100, 100, 1, '%']
+@var color    notfColor      "Notification color" #df001d 
+
+==/UserStyle== */
+
+@-moz-document url-prefix("https://straw.page/draw") {
+
+/* =====Preset palettes===== */
+if (palette == 'Custom') {
+    bgColor = _bgColor
+    mainColor = _mainColor
+    contColor = _contColor
+    borderColor = _borderColor
+    textColor = _textColor
+} else if (palette == 'Pl1'){
+    bgColor = #bbcee2
+    mainColor = #95b6d8
+    contColor = #F8FAFC
+    borderColor = #7d8a96
+    textColor = #4f565d
+    bgBr = bgBr - 7
+} else if (palette == 'Pl2') {
+    bgColor = #C7DB9C
+    mainColor = #d10b48
+    contColor = #FFF0BD
+    borderColor = #FDAB9E
+    textColor = #472a34
+    bgBr = bgBr - 3    
+} else if (palette == 'Pl3') {
+    bgColor = #e5c7a4
+    mainColor = #31a6a7
+    contColor = #e5e7c8
+    borderColor = #353543
+    textColor = #265073
+    bgBr = bgBr - 9
+    bgHue = bgHue + 10deg
+} else if (palette == 'Pl4') {
+    bgColor = #212d2c
+    mainColor = #096058
+    contColor = #14141b
+    borderColor = #45494d
+    textColor = #ede7e7
+    bgBr = bgBr - 8
+} else if (palette == 'Pl5') {
+    bgColor = #1f2326
+    mainColor = #948979
+    contColor = #303033
+    borderColor = #948979
+    textColor = #dfd0b8
+    bgBr = bgBr - 7
+} else if (palette == 'Pl6') {
+    bgColor = #1A1A1D
+    mainColor = #3B1C32
+    contColor = #bc5a8b
+    borderColor = #1A1A1D
+    textColor = #120d12
+    bgBr = bgBr - 7
+}
+
+/* =====Background patterns===== */
+BGC = bgColor
+
+if (backgrounds == 'Diamonds') {
+    BGImg = repeating-conic-gradient(from 45deg, bgColor 0% 25%, bgAlt 0% 50%);
+    BGP = 20px 0, 20px 0, 0 0, 0 0
+    BGS = 39px+bgScl 39px+bgScl 
+} else if (backgrounds == 'Checker') {
+    BGImg = repeating-conic-gradient(bgColor 0% 25%, bgAlt 0% 50%)
+    BGP = 10px 0, 6px+bgScl*2 6px+bgScl*2
+    BGS = 60px+bgScl 60px+bgScl
+} else if (backgrounds == 'Grid') {
+    BGImg = linear-gradient(bgColor 2px, transparent 2px), linear-gradient(to right, bgColor 2px, transparent 2px)
+    BGP = 0
+    BGS = 38px+bgScl 38px+bgScl
+    BGC = bgAlt
+} else if (backgrounds == 'Dots') {
+    BGImg = radial-gradient(bgColor 9px+bgScl/4, transparent 9px+bgScl/4), radial-gradient(bgColor 9px+bgScl/4, transparent 9px+bgScl/4)
+    BGP = 0 0, 20px+bgScl/2 20px+bgScl/2
+    BGS = 40px+bgScl 40px+bgScl
+    BGC = bgAlt
+} else if (backgrounds == 'Tri') {
+    BGImg = repeating-conic-gradient(from 30deg, bgColor 0% 60deg, bgAlt 0% 120deg)
+    BGP = 0 0, 20px+ 20px
+    BGS = 42px+bgScl*1.1 74px+bgScl*1.9
+} else if (backgrounds == 'dStripes') {
+    BGImg = repeating-linear-gradient(45deg, transparent, transparent 36px+bgScl, bgAlt 36px+bgScl, bgAlt 72px+bgScl*2)
+    BGP = inherit
+    BGS = inherit
+} else if (backgrounds == 'None') {
+    BGImg = none
+} else if (backgrounds == 'Gradient') {
+    BGImg = linear-gradient(0deg, bgAlt 0%+bgScl, bgColor 100%)
+    bgBr = bgBr + 30
+}
+
+/* =====Color mixing===== */
+
+bgAlt = hsl(hue(bgColor)+bgHue, saturation(bgColor)+bgSat, lightness(bgColor)+bgBr)
+contHue = hue(contColor)
+contLi = lightness(contColor)
+contSat = saturation(contColor)
+
+if luminosity(contColor) > .6 {
+            contLightness = contLi - contLi / 6
+			} else {
+            contLightness = contLi * 1.5
+            }
+contColorAcc = mix(contColor, hsl(contHue + 5deg, contSat * 2, contLightness), 35%)
+
+if (contrast(textColor, mainColor).ratio > 2 && contrast(textColor, mainColor).ratio > contrast(contColor, mainColor).ratio) {
+            TxtB = textColor
+			} else {
+            TxtB = contColor
+            }
+
+if (contrast(mainColor, borderColor).ratio > 3) {
+            OutB = borderColor
+            BorDsh = var(--border-dashed)
+        } else if (contrast(mainColor, borderColor).ratio > 1){
+            OutB =  mix(borderColor, TxtB, 50%)
+            BorDsh = repeating-linear-gradient(7deg, OutB, OutB 5px, transparent 5px, transparent 7px, TxtB 7px), repeating-linear-gradient(97deg, OutB, OutB 5px, transparent 5px, transparent 7px, OutB 7px), repeating-linear-gradient(187deg, OutB, OutB 5px, transparent 5px, transparent 7px, OutB 7px), repeating-linear-gradient(277deg, OutB, OutB 5px, transparent 5px, transparent 7px, OutB 7px)
+        } else {
+            OutB = TxtB
+            BorDsh = repeating-linear-gradient(7deg, TxtB, TxtB 5px, transparent 5px, transparent 7px, TxtB 7px), repeating-linear-gradient(97deg, TxtB, TxtB 5px, transparent 5px, transparent 7px, TxtB 7px), repeating-linear-gradient(187deg, TxtB, TxtB 5px, transparent 5px, transparent 7px, TxtB 7px), repeating-linear-gradient(277deg, TxtB, TxtB 5px, transparent 5px, transparent 7px, TxtB 7px)
+        }
+
+if (contrast(textColor, contColorAcc).ratio > 2) {
+            TxtAcc = textColor
+			} else {
+            TxtAcc = contColor
+            }
+
+:root {  
+    scrollbar-color: mainColor contColor;
+    --border-dashed:  repeating-linear-gradient(7deg, borderColor, borderColor 5px, transparent 5px, transparent 7px, borderColor 7px), repeating-linear-gradient(97deg, borderColor, borderColor 5px, transparent 5px, transparent 7px, borderColor 7px), repeating-linear-gradient(187deg, borderColor, borderColor 5px, transparent 5px, transparent 7px, borderColor 7px), repeating-linear-gradient(277deg, borderColor, borderColor 5px, transparent 5px, transparent 7px, borderColor 7px);
+    --border-dashed-alt:  repeating-linear-gradient(7deg, contColor, contColor 5px, transparent 5px, transparent 7px, contColor 7px), repeating-linear-gradient(97deg, contColor, contColor 5px, transparent 5px, transparent 7px, contColor 7px), repeating-linear-gradient(187deg, contColor, contColor 5px, transparent 5px, transparent 7px, contColor 7px), repeating-linear-gradient(277deg, contColor, contColor 5px, transparent 5px, transparent 7px, contColor 7px);
+}
+
+/* =====Header===== */
+
+.first {
+	background-color:  BGC;
+    background-image:  BGImg;
+    background-position:  BGP;
+    background-size: BGS;
+    background-repeat: repeat;
+}
+
+.intro {
+    border-radius:0;
+    border:none;
+    background-image:  var(--border-dashed);
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    background-color: contColor;
+    text-align: center;
+    font-weight: 1000;
+    font-size: 40px;
+    font-family: 'Frank Ruhl Libre';
+    color: textColor;
+    outline: 3px double borderColor;
+    outline-offset: -13px;
+    position:relative
+
+    img {
+        display: none;
+    }
+    
+    &::after {
+        content:'STRAW!';
+        vertical-align: middle; 
+    }
+    
+}
+
+.interlude {
+    background-color: contColor;
+    color:textColor;
+    padding: 7px 14px;
+    border:none;
+    background-image:  var(--border-dashed);
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid borderColor;
+    outline-offset: -5px;
+    padding: 10px 5px;
+}
+
+/* =====Menu===== */
+
+.kindaMenu button, .kindaMenu button.openPrem {
+    background-color: contColor;
+    color:textColor;
+    padding: 7px 14px;
+    border:none;
+    background-image:  var(--border-dashed);
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid borderColor;
+    outline-offset: -5px;
+
+    &.openPrem {
+        if (contrast(darken(saturate(contColorAcc, 50%), 5%), textColor).ratio < 2) {
+            color: contColor;
+        }
+        background-image:  var(--border-dashed);
+        outline: 1px solid borderColor;
+        background-color: darken(saturate(contColorAcc, 50%), 5%);   
+        
+        if (contrast(darken(saturate(contColorAcc, 50%), 5%), borderColor).ratio < 1.2) {
+            outline: 1px solid contColor;
+            background-image:  var(--border-dashed-alt);
+        }  
+    }
+    
+    &:hover, &.selectedKinda {
+        if (contrast(mainColor, contColor).ratio > contrast(mainColor, textColor).ratio) {
+            color: contColor;
+            background-image: var(--border-dashed-alt);
+            outline: 1px solid contColor;
+        } else if (contrast(mainColor, OutB).ratio < contrast(mainColor, textColor).ratio){
+            color: textColor;
+            background-image: BorDsh;
+            outline: 1px solid OutB;
+        } else {
+            color: OutB;
+            background-image:  BorDsh;
+            outline: 1px solid OutB;
+        }
+        border: none;
+        background-color: mainColor;
+        background-size: 1px calc(100% + 7.05px), calc(100% + 7.05px) 1px, 1px calc(100% + 7.05px) , calc(100% + 7.05px) 1px;
+        background-position: 0 0, 0 0, 100% 0, 0 100%;
+        background-repeat: no-repeat; 
+        border-radius: 0;    
+    }
+    
+    &:hover {
+        animation: borderAnimation 1s infinite linear;
+    }
+}
+
+@keyframes borderAnimation { from { background-position: 0 0, -7.05px 0, 100% -7.05px, 0 100%; } to { background-position: 0 -7.05px, 0 0, 100% 0, -7.05px 100%; } } 
+
+.kindaMenu button span {
+    background: notfColor;
+    if luminosity(notfColor) < .3 {
+        color: #fff;
+    } else {
+        color: #000;
+    }
+}
+
+.extraKinda {
+    a, a:link, a:visited, .a:hover, .a:focus, a:active {
+        if contrast(textColor, bgColor).ratio > 1.8 {
+            color: textColor;
+        } else {
+            color: contColor;
+        }
+    }
+}
+    
+/* =====Home===== */
+    
+.interludeExplain .arrow {
+    display: none;
+}
+
+.interludeExplain::after {
+    content: '';
+    width: 66px;
+    height: 40px;
+    mask-image: url("arrow.png");
+    mask-mode: alpha;
+    mask-size: auto 40px;
+    mask-repeat: no-repeat;
+    position:relative;
+    top:10px;
+    if (contrast(borderColor, bgColor).ratio > 2) {
+        background: borderColor;
+    } else if (contrast(mainColor, bgColor).ratio > 2){
+        background: mainColor;
+    } else {
+        background: contColor;
+    }
+}
+    
+.uhh p {
+    if (contrast(TxtB, bgColor).ratio > 1.5) {
+        color: TxtB;        
+    } else if (contrast(textColor, bgColor).ratio > 2){
+        color: textColor;
+    } else {
+        color: contColor;
+    }
+    border-radius: 0;
+    border: none;
+    background-color: mainColor;
+    background-image:  BorDsh;
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid OutB;
+    outline-offset: -5px;
+    
+    &:hover {
+        background-image: var(--border-dashed);
+         animation: borderAnimation 1s infinite linear; 
+        background-size: 1px calc(100% + 7.05px), calc(100% + 7.05px) 1px, 1px calc(100% + 7.05px) , calc(100% + 7.05px) 1px;
+        background-position: 0 0, 0 0, 100% 0, 0 100%;
+        background-repeat: no-repeat; 
+    }
+}
+    
+/* Sites */
+
+.sites, .sites > h4, .menu {
+    background-color: contColor;
+    color:textColor;
+    background-image:  var(--border-dashed);
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid borderColor;
+    outline-offset: -5px;
+    border:none
+}
+
+.sites > h4 {
+    top:-8px;
+    background-color: mainColor;
+    color: TxtB;
+    outline-color: OutB;
+    background-image: BorDsh;
+}			
+
+.sites select {
+    background: contColorAcc;
+    color:TxtAcc;
+    border: 1px solid borderColor;
+}
+
+.selectWrap i {
+    color:TxtAcc;
+}
+
+.site {
+    color:textColor; 
+}
+
+.mac {
+    border: 1px solid borderColor;
+    background: mainColor;
+    
+    >p {
+        color:TxtB;
+    }
+    
+    img {
+        border-color: borderColor;
+    }
+}
+
+.site iframe {
+    border: 1px solid borderColor;
+    border-top:none;
+}
+
+.siteViews {
+    background-color: mainColor;
+    border: 1px solid borderColor;
+    border-bottom: none;
+    border-radius: 0;
+    color: TxtB; 
+}
+
+.siteOptions {
+	border: 1px solid borderColor;
+    border-top: none;
+    border-bottom: none;
+    
+    button {
+    color: textColor;        
+    }
+}
+
+.shareSite {
+    background-color: mainColor;
+    color: TxtB; 
+    border: 1px solid borderColor;
+}
+
+.shareSplit i {
+    border: 1px solid borderColor;
+    border-left:none;
+    color: mainColor;
+}
+
+.settingsOverlay, .analyticsOverlay {
+    scrollbar-color: mainColor contColor;
+    scrollbar-width: thin;
+    background-color: contColorAcc;
+    border: 1px solid borderColor;
+    
+    button, img {
+        border:none;
+        background-image: BorDsh;
+        background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+        background-position: 0 0, 0 0, 100% 0, 0 100%;
+        background-repeat: no-repeat; 
+        color: TxtB;
+        background-color: mainColor;
+        border-radius: 2px;
+        
+        &:hover {
+            animation: borderAnimation 1s infinite linear; 
+            background-size: 1px calc(100% + 7.05px), calc(100% + 7.05px) 1px, 1px calc(100% + 7.05px) , calc(100% + 7.05px) 1px;
+            background-position: 0 0, 0 0, 100% 0, 0 100%;
+        }
+    }
+    
+    img {
+        margin-right:-1px
+        padding: 2px
+    }
+    
+    .innerDraw > i, .innerDraw .tools {
+        border: 1px solid borderColor;
+        border-bottom:none;
+        color: TxtB;
+        background-color: contColorAcc;
+        
+        input {
+            border: 1px solid borderColor;
+        }
+    }
+}
+
+.drawOverlay canvas {
+    border: 1px solid borderColor;
+        border-bottom:none;
+}
+
+.innerSetInput input, .editPart input {
+    background: contColor;
+    color: textColor;
+    border: 1px solid borderColor;
+    border-bottom: none;
+}
+
+.setPart {
+    color: TxtAcc;    
+}
+
+.closeSet {
+    color: TxtAcc; 
+    border: 1px solid borderColor;
+    
+    &:hover {
+        color: contColor;
+        background: mainColor;
+    }  
+}
+
+.newSite {
+	border: none;
+    box-shadow:none;
+    background-color: mainColor;
+    background-image:  BorDsh;
+    background-size: 1px calc(100% + 7.05px), calc(100% + 7.05px) 1px, 1px calc(100% + 7.05px) , calc(100% + 7.05px) 1px;
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid OutB;
+    outline-offset: -5px;
+    cursor:pointer;
+    color:TxtB;
+    transition: all 0.1s ease;
+    &:hover {
+        box-shadow:none;
+        animation: borderAnimation 1s infinite linear;
+        background-image:  var(--border-dashed-alt);
+        outline-color: contColor;
+        color:contColor;
+    }
+}
+
+/* Feed */
+
+.feedActionsTab button, .feedPro {
+    border: none;
+    background: contColor;
+    background-image:  var(--border-dashed);
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 0px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid borderColor;
+    outline-offset: -5px;
+    cursor:pointer;
+    transition: all 0.3s ease;
+    color: textColor;
+    
+    &.selectedTab {
+        color: TxtAcc;
+        background-color:  contColorAcc;
+        background-image:  var(--border-dashed);
+        background-size: 1px 100%, 100% 1px, 1px 100% , 100% 0px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    }
+    
+    &:hover {
+        background-image:  var(--border-dashed);
+        background-size: 1px calc(100% + 7.05px), calc(100% + 7.05px) 1px, 1px calc(100% + 7.05px) , calc(100% + 7.05px) 0px;
+        background-position: 0 0, 0 0, 100% 0, 0 100%;
+        background-repeat: no-repeat; 
+        border-radius: 0;
+        animation: borderAnimation 1s infinite linear;
+    }
+}
+
+.feedActionsInner, .post, .postExplain {
+    padding: 4px;
+    background-color: contColor;
+    background-image:  var(--border-dashed);
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid borderColor;
+    outline-offset: -5px;
+    border: none;
+    color: textColor;
+    
+    .meta {
+        border: 1px solid borderColor;
+        color: TxtB;
+        background:  mainColor;
+    }
+    
+    .content {
+        background: none;
+        color: textColor;
+    }
+}
+
+.feedActionsInner {
+    background-color:  contColorAcc;
+    color: TxtAcc;
+}
+
+.feedMeta {
+    background-color: mainColor;
+    margin:1px;
+    border-left:1px solid borderColor;
+    color: TxtB;
+}
+
+.followingDon img {
+    border: 1px solid borderColor;
+    
+}
+
+.addingDon i {
+    background: contColor;
+    border: 1px solid borderColor;
+    color: textColor;
+    
+    &:hover {
+        background: mainColor;
+        color: contColor;
+    }
+}
+
+.innerAddPeople {
+    input {
+        background: contColor;
+        color: textColor;
+        border: 1px solid borderColor;
+    }
+    i {
+        background: mainColor;
+        border-color: borderColor;
+        border-width: 1px;
+        color: contColor;
+    }
+}
+
+.addPeople > p {
+    color: textColor;
+}
+
+.feedPro {
+    background-size: 1px calc(100% + 7.05px), calc(100% + 7.05px) 1px, 1px calc(100% + 7.05px) , calc(100% + 7.05px) 1px;
+    padding: 10px 5px;
+    background-color: mix(contColor, mainColor, 50%);
+    if (contrast(contColorAcc, mix(contColor, mainColor, 50%)).ratio*1.1 > 1.8) {
+        feedTxt = contColorAcc
+    } else {
+        feedTxt = textColor
+    }
+    color: feedTxt;
+
+    if (contrast(borderColor, mix(contColor, mainColor, 50%)).ratio > 1.3) {
+        outline-color: borderColor;
+    } else {
+        feedOut = mix(feedTxt, OutB, 50%)
+        outline-color: feedOut;
+        background-image: repeating-linear-gradient(7deg, feedOut, feedOut 5px, transparent 5px, transparent 7px, feedOut 7px), repeating-linear-gradient(97deg, feedOut, feedOut 5px, transparent 5px, transparent 7px, feedOut 7px), repeating-linear-gradient(187deg, feedOut, feedOut 5px, transparent 5px, transparent 7px, feedOut 7px), repeating-linear-gradient(277deg, feedOut, feedOut 5px, transparent 5px, transparent 7px, feedOut 7px)
+    }
+    
+    &:hover {
+        background-image: var(--border-dashed-alt);
+        outline-color: contColor;
+        color: contColor;
+        background-color: mainColor;
+        background-size: 1px calc(100% + 7.05px), calc(100% + 7.05px) 1px, 1px calc(100% + 7.05px) , calc(100% + 7.05px) 1px;
+    }
+}
+
+.postExplain {
+    padding: 14px;
+    
+    i {
+        color: mainColor;
+        bottom: 8px
+        right: 8px;
+    }
+}
+
+.vidHold {
+    padding: 4px;
+    background: contColor;
+    background-image:  var(--border-dashed);
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid borderColor;
+    outline-offset: -5px;
+    border: none;
+    
+    video {
+    border: 5px solid #fff0
+    }
+    
+    >p {
+        color: mainColor;
+    }
+}
+
+.outsideOptions {
+    color: mix(mainColor, textColor, 30%);
+}
+
+/* Site preview */
+
+.donnyPreview {
+    background: contColor;
+    border-left: 1px dashed borderColor;
+}
+
+.donnyControls i {
+    border: 1px solid borderColor;
+    background: rgba(contColorAcc, 0.7);
+    color: borderColor;
+    
+    &:hover {
+        background: mainColor;
+        color: contColor;
+    }
+}
+
+/* =====Gimmicks===== */
+
+.gimmicks > h4 {
+    border-radius: 0;
+    background: mainColor;
+    color: TxtB;
+    background-image:  BorDsh;
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid OutB;
+    outline-offset: -5px;
+    border: none;
+    
+    span{
+        margin: 3px 3px;
+        margin-top: 0
+    }
+}
+
+.gimmicks > h6 {
+    if contrast(textColor, bgColor).ratio > 1.8 {
+        color: textColor;
+    } else {
+        color: contColor;
+    }
+}
+
+.gimmickItem {
+    padding: 4px;
+}
+
+.gimmickItem, .reviewMode {
+    background: contColor;
+    background-image:  var(--border-dashed);
+    background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+    background-position: 0 0, 0 0, 100% 0, 0 100%;
+    background-repeat: no-repeat; 
+    border-radius: 0;
+    outline: 1px solid borderColor;
+    outline-offset: -5px;
+    border: none;
+    color: textColor;
+    
+    button, button.enabled {
+        border:none;
+        background-image: var(--border-dashed);
+        background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+        background-position: 0 0, 0 0, 100% 0, 0 100%;
+        background-repeat: no-repeat; 
+        color: textColor;
+        background-color: mix(contColor, mainColor, 70%);
+        border-radius: 2px;
+        
+        &:hover {
+            background-color: mainColor;
+            animation: borderAnimation 1s infinite linear; 
+            background-size: 1px calc(100% + 7.05px), calc(100% + 7.05px) 1px, 1px calc(100% + 7.05px) , calc(100% + 7.05px) 1px;
+            background-position: 0 0, 0 0, 100% 0, 0 100%;
+        }
+    }
+    
+    button.enabled {
+        background-color: mainColor;
+    }
+    
+    img {
+        border-left: 1px solid borderColor;
+        border-right: 1px solid borderColor;
+    }
+}
+
+.gimmickTraffic, .gimmickItem .itemMenu {
+    border: 1px solid borderColor;
+    color: TxtB;
+    background:  mainColor;
+}
+
+.traffic {
+    if (trf) {
+        margin-left: -4px;
+        margin-top:-3px;
+    } else {
+        margin-left: 2px;
+    }
+}
+
+.traffic span, .gimmickTraffic .traffic span {
+    if (trf) {
+    height: 18px;
+    width: 18px;
+    margin-right:-2px;
+    mask: radial-gradient(#0000 76%, #000 80%) 10000% 10000%/99.5% 99.5%;
+    transform: scale(1.1, 1.3); 
+    } else {
+    margin-right:8px;
+}
+    background: contColor;  
+}
+
+.gimmickItem .asker {
+    color: textColor;
+    
+    >p {
+        background-image:  var(--border-dashed);
+        background-size: 1px 100%, 100% 1px, 1px 100% , 100% 1px; 
+        background-position: 0 0, 0 0, 100% 0, 0 100%;
+        background-repeat: no-repeat; 
+        border-radius: 0;
+        background-color: mix(contColor, contColorAcc, 75%);
+    }
+}
+
+.gimmickItem .itemMenu {
+    background: none;
+}
+
+.gimmickItem .itemMenuOptions {
+    color: mainColor;
+}
+
+.menu {
+    background-color: rgba(mainColor, 0.3);
+    padding: 10px 25px;
+
+}
+    
+}
