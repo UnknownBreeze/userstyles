@@ -2,7 +2,7 @@
 @name           Dashed - Straw.page Dashboard Theme
 @namespace      https://github.com/UnknownBreeze/userstyles
 @version        1.0.0
-@description    Customizable theme for straw.page dashboard.
+@description    Customizable theme for strawpage dashboard.
 @author         Jare
 @license        MIT
 @preprocessor   stylus
@@ -794,6 +794,10 @@ if (contrast(textColor, contColorAcc).ratio > 2) {
     border: 1px solid borderColor;
     color: TxtB;
     background:  mainColor;
+}
+
+.gimmickItem .itemMenu {
+    color: textColor;
 }
 
 .traffic {
